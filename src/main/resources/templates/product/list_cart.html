@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <table class="table" th:if="${cart != null && cart.getProductMap().size() > 0}">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="productMap, status : ${cart.productMap}">
+<!--                <td id="idProduct" th:hidden="${productMap.key.id}"></td>-->
+                <td th:text="${productMap.key.name}">SamSung Galaxy Note</td>
+                <td>
+                    <img width="100px" th:src="${productMap.key.image}">
+                </td>
+<!--                <td id="price" th:text="${productMap.key.price}"></td>-->
+                <td class="price"  th:text="${productMap.key.price}"></td>
+                <td>
+<!--                    <select th:id="'quantity' + ${productMap.key.id}"  th:onchange="'changeQuantity('+${productMap.key.id}+')'">-->
+<!--                        <option th:each="i : ${#numbers.sequence(0, productMap.key.quantity)}" th:value="${i}" th:text="${i}"-->
+<!--                                th:selected="${i == productMap.value}"></option>-->
+<!--                    </select>-->
+
+                    <select class="quantity"  th:onchange="'changeQuantity('+${productMap.key.id}+')'">
+                        <option th:each="i : ${#numbers.sequence(0, productMap.key.quantity)}" th:value="${i}" th:text="${i}"
+                                th:selected="${i == productMap.value}"></option>
+                    </select>
+                </td>
+                <!--                <td th:text="${productMap.value}"></td>-->
+
+                <td><a class="btn btn-danger" th:href="@{/shop/delete/__${productMap.key.id}__}">X</a></td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td></td>
+<!--                <td th:id = "total" th:text="${cart.countTotalPayment()}">-->
+
+                <td th:id = "total" th:text="${cart.countTotalPayment()}">
+            </tr>
+            </tbody>
+        </table>
+        <div class="alert alert-warning" role="alert" th:if="${cart == null || cart.getProductMap().size() == 0}">
+            Cart Empty
+        </div>
+    </div>
+</div>
+<script>
+    function changeQuantity(id){
+        console.log('come here');
+        // let idQuantity = "quantity" + id;
+        // console.log(idQuantity)
+        // let quatity =  document.getElementById(idQuantity).value;
+        // console.log(quatity);
+        // let idPrice = "price" + id;
+        // let total = quatity * price;
+        // console.log(total);
+        // document.getElementById("total").innerText = total;
+
+
+
+        let allPrice = document.getElementsByClassName("price");
+        console.log(allPrice);
+        let sumPrice = 0;
+        for (let i = 0; i < allPrice.length; i++) {
+            sumPrice +=  allPrice[i].innerHTML * 1;
+        }
+        console.log(sumPrice)
+
+        let allQuantity = document.getElementsByClassName("quantity");
+        console.log(allQuantity);
+
+        let sumQuantity = 0;
+        for (let i = 0; i < allQuantity.length; i++) {
+            sumQuantity +=  allQuantity[i].value * 1;
+        }
+        console.log(sumQuantity)
+
+        let total = sumPrice * sumQuantity;
+        console.log(total);
+        document.getElementById("total").innerText = total;
+
+
+    }
+</script>
+</body>
+</html>
+
+<!--status.index-->
